@@ -50,7 +50,6 @@ while max_limit <= len(vectors):
                     entity_frecuency[entity] += 1
             cont_training += 1
         cont_total += 1
-    
     #print("Training vectors: %s" % cont_training)   
     #print("Sampling vectors: %s" % cont_sample) 
 
@@ -76,13 +75,14 @@ while max_limit <= len(vectors):
                     pass
             error.append(float(succes)/len(flatten_entity))
         
-    #print(sum(error)/float(cont_sample))
+    print(sum(error)/float(cont_sample))
     errors.append(sum(error)/float(len(error)))
     
     # Update k-fold iteration
     min_limit += k
     max_limit += k
     
+# Calculate mean and sd from errors
 n = float(len(errors))
 mean = sum(errors) / n
 deviation = 0
