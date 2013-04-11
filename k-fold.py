@@ -7,9 +7,17 @@ import math
 # Import vectors previusly getted from MongoDB
 vectors = pickle.load(open("data/vectors.p", "rb"))
 
-keys = vectors.keys()
-random.shuffle(keys)
+# Shuffle the dict keys
+rand_keys = []
+keys = list(vectors.keys())
+i = 0
+while len(keys) > 0:
+    element = random.choice(keys)
+    keys.remove(element)
+    rand_keys.append(element)
+    i += 1
 
+# Parameters
 k = 40
 min_limit = 0
 max_limit = min_limit + k
@@ -26,7 +34,7 @@ while max_limit <= len(vectors):
     cont_total = 0
     
     # Run k-fold testing
-    for id in keys:
+    for id in rand_keys:
         # Sampling
         if cont_total >= min_limit and cont_total < max_limit:
             cont_sample += 1
