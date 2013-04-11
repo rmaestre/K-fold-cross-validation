@@ -2,6 +2,7 @@
 import json
 import pickle
 import random
+import math
 
 # Import vectors previusly getted from MongoDB
 vectors = pickle.load(open("data/vectors.p", "rb"))
@@ -60,13 +61,11 @@ while max_limit <= len(vectors):
         # Starting test
         if len(flatten_entity) > 0:
             succes = 0
-            print(flatten_entity)
             for entity in flatten_entity:
                 if entity in entity_frecuency:
                     succes += 1
                 else:
-                    print(entity)
-            print(float(succes)/len(flatten_entity))
+                    pass
             error.append(float(succes)/len(flatten_entity))
         
     #print(sum(error)/float(cont_sample))
@@ -76,8 +75,14 @@ while max_limit <= len(vectors):
     min_limit += k
     max_limit += k
     
-    
-print("Final error: %s" % (sum(errors)/float(len(errors))))
+n = float(len(errors))
+mean = sum(errors) / n
+deviation = 0
+for error in errors:
+    deviation += pow((float(error - mean)), 2)
+std_deviation = math.sqrt(deviation) * 1/n
+print("Mean: %f\tDS:%f" % (mean, std_deviation))
+
 
     
     
