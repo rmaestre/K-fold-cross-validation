@@ -23,4 +23,4 @@ The variance of F* can be large.[8][9] For this reason, if two statistical proce
 Head distribution ration on supervision process related with the final precision
 ======
 
-![Headistribution](https://github.com/rmaestre/K-fold-cross-validation/blob/master/results/results.png)
+![Headistribution](https://raw.github.com/rmaestre/K-fold-cross-validation/master/results/results.png)
