@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
+from __future__ import division
 import json
 import pickle
 import random
 import math
+import operator
+from collections import OrderedDict
+
 
 # Import vectors previusly getted from MongoDB
 vectors = pickle.load(open("data/vectors.p", "rb"))
@@ -40,7 +44,16 @@ while max_limit <= len(vectors):
             cont_sample += 1
             vectors_to_testing[cont_sample] = {}
             vectors_to_testing[cont_sample]["supervised"] = vectors[id]["supervised_tags"]
-            vectors_to_testing[cont_sample]["text"] = vectors[id]["text"]
+            i = 0
+            while i < len(vectors_to_testing[cont_sample]["supervised"]):
+                vectors_to_testing[cont_sample]["supervised"][i] = vectors_to_testing[cont_sample]["supervised"][i].lower()
+                i += 1
+            vectors_to_testing[cont_sample]["text"] = vectors[id]["text"][0].lower()+" "+vectors[id]["text"][1].lower()
+            vectors_to_testing[cont_sample]["raw_tags"] = vectors[id]["raw_tags"]
+            i = 0
+            while i < len(vectors_to_testing[cont_sample]["raw_tags"]):
+                vectors_to_testing[cont_sample]["raw_tags"][i] = vectors_to_testing[cont_sample]["raw_tags"][i].lower()
+                i += 1
         else:
             # Update model with training vectors
             for entity in vectors[id]["supervised_tags"]:
@@ -52,28 +65,58 @@ while max_limit <= len(vectors):
         cont_total += 1
     #print("Training vectors: %s" % cont_training)   
     #print("Sampling vectors: %s" % cont_sample) 
-
+    
+    
+    # Tacking into account the tail distribution
+    for index in vectors_to_testing:
+        head_dist_entities = {}
+        for entity in vectors_to_testing[index]["raw_tags"]:
+            if entity in entity_frecuency:
+                head_dist_entities[entity] = entity_frecuency[entity]
+            else:
+                head_dist_entities[entity] = 0
+                
+        aux = []
+        items = sorted(head_dist_entities.items(), key=lambda x: x[1], reverse = True)
+        cont = 0
+        for item in items:
+            aux.append(item[0])
+            if cont == 100:
+                break
+            cont += 1
+        vectors_to_testing[index]["raw_tags"] = aux
+        
+    # Start to check the vectors
     error = []
     for id in vectors_to_testing:
         entities = vectors_to_testing[id]["supervised"]
-        raw_text = vectors_to_testing[id]["text"][0]+" "+vectors_to_testing[id]["text"][1]
+        raw_text = vectors_to_testing[id]["text"]
         n = len(entities)
-        flatten_entity = []
-        for entity in entities:
-            if raw_text.find(entity) != -1:
-                flatten_entity.append(entity)
-        #print("Testing vector with %s/%s into the text" % (len(flatten_entity), n))
-        #print("%s" % (float(len(flatten_entity))/float(n)))
     
-        # Starting test
-        if len(flatten_entity) > 0:
-            succes = 0
-            for entity in flatten_entity:
-                if entity in entity_frecuency:
-                    succes += 1
-                else:
-                    pass
-            error.append(float(succes)/len(flatten_entity))
+        error_entity = []
+        new_entity = []
+        #print("-->",vectors_to_testing[id]["raw_tags"],"\n")
+        for entity in entities:
+            if raw_text.find(entity) == -1 and entity not in vectors_to_testing[id]["raw_tags"]:
+                new_entity.append(entity)
+            elif raw_text.find(entity) != -1 and entity not in vectors_to_testing[id]["raw_tags"]:
+                error_entity.append(entity)
+        
+        """
+        print("NER:%s\n" % vectors_to_testing[id]["raw_tags"])
+        print("Supervised:%s\n" % vectors_to_testing[id]["supervised"])
+        print("Errors:%s %s" % (len(error_entity), error_entity))
+        print("New:%s %s\n" % (len(new_entity), new_entity))
+        print(vectors_to_testing[id]["text"],"\n")
+        """
+        n -= len(new_entity)
+        if len(error_entity) == 0:
+            ratio = 0
+        else:
+            ratio = (len(error_entity)/n)
+        ratio = 1-ratio
+        if len(entities) > 0:
+            error.append(ratio)
         
     print(sum(error)/float(cont_sample))
     errors.append(sum(error)/float(len(error)))
