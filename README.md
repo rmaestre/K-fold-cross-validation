@@ -7,6 +7,8 @@ and validating the analysis on the other subset (called the validation set or te
 
 Cross-validation is important in guarding against testing hypotheses suggested by the data, especially where further samples are hazardous, costly or impossible to collect 
 
+![Kfold](https://upload.wikimedia.org/wikipedia/commons/f/fc/4fold3class.jpg)
+
 
 Statistical properties
 ======
