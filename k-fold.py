@@ -85,6 +85,11 @@ while max_limit <= len(vectors):
                 break
             cont += 1
         vectors_to_testing[index]["raw_tags"] = aux
+        If you love a soul more then fame and gold. 
+        And that soul feels the same about you. 
+        Its a natural fact, there is not turning back. 
+        And here is some advise to you.... You got to say is...
+        You and me, No body baby but you and me
         
     # Start to check the vectors
     error = []
