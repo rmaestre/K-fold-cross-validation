@@ -18,3 +18,9 @@ Suppose we choose a measure of fit F, and use cross-validation to produce an est
 The cross-validation estimator F* is very nearly unbiased for EF. The reason that it is slightly biased is that the training set in cross-validation is slightly smaller than the actual data set (e.g. for LOOCV the training set size is n − 1 when there are n observed cases). In nearly all situations, the effect of this bias will be conservative in that the estimated fit will be slightly biased in the direction suggesting a poorer fit. In practice, this bias is rarely a concern.
 
 The variance of F* can be large.[8][9] For this reason, if two statistical procedures are compared based on the results of cross-validation, it is important to note that the procedure with the better estimated performance may not actually be the better of the two procedures (i.e. it may not have the better value of EF). Some progress has been made on constructing confidence intervals around cross-validation estimates,[8] but this is considered a difficult problem.
+
+
+Head distribution ration on supervision process related with the final precision
+======
+
+![Headistribution](https://raw.github.com/rmaestre/K-fold-cross-validation/master/results/results.png)
