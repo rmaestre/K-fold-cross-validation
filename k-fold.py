@@ -52,7 +52,7 @@ while max_limit <= len(vectors):
             vectors_to_testing[cont_sample]["raw_tags"] = vectors[id]["raw_tags"]
             i = 0
             while i < len(vectors_to_testing[cont_sample]["raw_tags"]):
-                vectors_to_testing[cont_sample]["raw_tags"][i] = vectors_to_testing[cont_sample]["raw_tags"][i].lower()
+                vectors_to_testing[cont_sample]["raw_tags"][i] = vectors_to_testing[cont_sample]["raw_tags"][i][0].lower()
                 i += 1
         else:
             # Update model with training vectors
@@ -81,15 +81,10 @@ while max_limit <= len(vectors):
         cont = 0
         for item in items:
             aux.append(item[0])
-            if cont == 100:
+            if cont > 40:
                 break
             cont += 1
         vectors_to_testing[index]["raw_tags"] = aux
-        If you love a soul more then fame and gold. 
-        And that soul feels the same about you. 
-        Its a natural fact, there is not turning back. 
-        And here is some advise to you.... You got to say is...
-        You and me, No body baby but you and me
         
     # Start to check the vectors
     error = []
@@ -123,7 +118,7 @@ while max_limit <= len(vectors):
         if len(entities) > 0:
             error.append(ratio)
         
-    print(sum(error)/float(cont_sample))
+    #print(sum(error)/float(cont_sample))
     errors.append(sum(error)/float(len(error)))
     
     # Update k-fold iteration
